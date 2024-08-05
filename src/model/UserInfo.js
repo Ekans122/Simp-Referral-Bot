@@ -3,9 +3,12 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-    username: { type: String, required: true, unique: true },
+    username: { type: String, default: "User" },
     referralCode: { type: String, required: true, unique: true },
-    friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    friends: [{ type: String }],
+    referredBy: { type: String },
+    referralCount: { type: Number, default: 0 },
+    lastReferralDate: { type: Date, default: Date.now },
 });
 
 export default mongoose.model("User", UserSchema);
