@@ -8,7 +8,7 @@
     "prepare": "husky install",
     "local": "set NODE_PATH=src/&& dotenv -e .env.local nodemon src/index.js",
     "dev": "set NODE_PATH=src/&& dotenv -e .env nodemon src/index.js",
-    "prod": "NODE_PATH=src/ dotenv -e .env node src/index.js",
+    "prod": "set NODE_PATH=src/&& dotenv -e .env node src/index.js",
     "lint": "eslint src --fix",
     "prettier:fix": "prettier --write",
     "prettier:check": "prettier --check"
