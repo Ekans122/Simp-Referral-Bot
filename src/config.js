@@ -1,6 +1,18 @@
-require('dotenv').config();
+import mongoose from "mongoose";
+import dotenv from 'dotenv';
 
-module.exports = {
-  TOKEN: process.env.TELEGRAM_BOT_TOKEN,
-  BACKEND_URL: process.env.BACKEND_URL
-};
+dotenv.config();
+
+export async function dbConnect() {
+  try {
+      console.log(process.env.MONGO_URI);
+      const conn = await mongoose.connect(process.env.MONGO_URI);
+      console.log(`MongoDB Connected: ${conn.connection.host}`);
+      return conn;
+  } catch (error) {
+      console.log(error);
+      return process.exit(1);
+  }
+}
+
+export const { TOKEN, BACKEND_URL, PORT, REFERRALLINK } = process.env;
