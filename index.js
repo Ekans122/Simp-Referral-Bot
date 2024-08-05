@@ -20,6 +20,9 @@ app.get('/', (req, res) => {
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(TOKEN, { polling: true });
 
+const webhookUrl = 'https://simp-referral-bot.vercel.app/api/telegram-bot';
+bot.setWebHook(webhookUrl);
+
 bot.onText(/\/start (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
   const username = msg.from.username;
