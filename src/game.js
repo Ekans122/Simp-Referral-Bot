@@ -63,7 +63,7 @@ export const handleReferral = async (username, userId, referralCode) => {
   const rocketEmoji = '\uD83D\uDE80'; // 🚀
   const gemEmoji = '\uD83D\uDC8E'; // 💎
   const giftEmoji = '\uD83C\uDF81'; // 🎁
-  const inviteText = `Welcome to our Simp Gods! <${username}>\n
+  const inviteText = `Welcom to Simp Gods! <${username}>\n
       ${giftEmoji} You are invited to our Simp Gods!${giftEmoji}\n
       ${gemEmoji}${gemEmoji}${gemEmoji} Join our Group and Enjoy!!!\n
       Simp is your gateway to rewards and adventures! ${rocketEmoji}\n`;
@@ -113,19 +113,19 @@ export const handleReferral = async (username, userId, referralCode) => {
 export const handleReferralVerification = async (member) => {
   const { id, username, is_bot } = member;
   console.log("User referred: ", member);
-  if (is_bot) return { status: 'error', message: `Welcome to our Simp Gods! <${username}>` };
+  if (is_bot) return { status: 'error', message: `Welcom to Simp Gods! <${username}>` };
   const user = await User.findOne({ referralCode: id });
-  if (!user) return { status: 'error', message: `Welcome to our Simp Gods! <${username}>` };
+  if (!user) return { status: 'error', message: `Welcom to Simp Gods! <${username}>` };
 
   const referralUser = await User.findOne({ referralCode: user.referredBy });
-  if (!referralUser) return { status: 'error', message: `Welcome to our Simp Gods! <${username}>` };
+  if (!referralUser) return { status: 'error', message: `Welcom to Simp Gods! <${username}>` };
   referralUser.friends.push({ id, username });
   referralUser.referralCount++;
   referralUser.lastReferralDate = new Date();
   await referralUser.save();
 
   console.log("User referred: ", referralUser);
-  return { status: 'success', message: `Welcome to our Simp Gods! <${username}>`, options: {} };
+  return { status: 'success', message: `Welcom to Simp Gods! <${username}>`, options: {} };
 }
 
 export const handleGetList = async () => {

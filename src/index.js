@@ -11,6 +11,8 @@ dbConnect();
 // Create an Express app
 const app = express();
 
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(TOKEN, { polling: true });
 
