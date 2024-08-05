@@ -2,8 +2,8 @@ import express from "express";
 import TelegramBot from "node-telegram-bot-api";
 // Use environment variables for sensitive information
 
-import { TOKEN, PORT, dbConnect, REFERRALLINK } from './config.js';
-import { handleReferral, handleUsername, handleReferralVerification, handleGetList } from "./game.js";
+import { TOKEN, PORT, dbConnect, REFERRALLINK } from './src/config.js';
+import { handleReferral, handleUsername, handleReferralVerification, handleGetList } from "./src/game.js";
 
 
 dbConnect();
@@ -11,7 +11,11 @@ dbConnect();
 // Create an Express app
 const app = express();
 
-app.get("/", (req, res) => res.send("Express on Vercel"));
+app.use(express.static('public'));
+
+app.get('/', (req, res) => {
+  res.sendFile('index.html', {root: path.join(__dirname, 'public')});
+})
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(TOKEN, { polling: true });
