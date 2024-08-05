@@ -3,7 +3,7 @@ import TelegramBot from "node-telegram-bot-api";
 // Use environment variables for sensitive information
 
 import { TOKEN, PORT, dbConnect, REFERRALLINK } from './config.js';
-import { handleReferral, handleUsername, handleReferralVerification } from "./game.js";
+import { handleReferral, handleUsername, handleReferralVerification, handleGetList } from "./game.js";
 
 
 dbConnect();
@@ -57,6 +57,10 @@ bot.on('message', async msg => {
         break;
       case '/MYREFERRAL':
         await bot.sendMessage(chatId, `Your referral link is: ${REFERRALLINK}?start=${userId}`);
+        break;
+      case '/LEADERBOARD':
+        const res = await handleGetList();
+        await bot.sendMessage(chatId, res.message);
         break;
       default:
     }
