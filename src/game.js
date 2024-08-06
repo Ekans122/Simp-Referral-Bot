@@ -6,24 +6,31 @@ export const handleUsername = async (bot, chatId, userId, username) => {
   const eyesEmoji = '\uD83D\uDC40'; // 👀
   const playGuitarEmoji = '\uD83C\uDFB8'; // 🎸
   const giftEmoji = '\uD83C\uDF81'; // 🎁
-  const welcomeText = `Welcome to Simp Gods Referral Program!
+  const welcomeText = `
+  Welcome to the $SIMPG Referral Program!
 
->> COMMANDS:
-
-1️⃣ [ /start ] - help menu.
-2️⃣ [ /myreferral ] - generate your own unique referral link.
-3️⃣ [ /leaderboard ] - view the list of all members who have invited their friends to become Simp Gods!
-
->> AIRDROP REWARD RULES:
-
-📱 Use your own uniquely generated referral link and share it with your friends!
-🚀 TOP 20 members in the Leaderboards will share $5,000 in $SIMPG Tokens for FREE!
-⏳ This FREE airdrop has a Limited Time pre-launch, be quick and invite as many friends as you can!
-
->> IT'S FUN BEING A SIMP GOD:
-
-🌹 You can simp for Madison Beer https://simpgods.wtf/ai like a true Simp God!
-🤳 Share screenshots on your X profile of you simping and tag #simpgodswtf for secret rewards!`;
+  >>> COMMANDS:
+  
+  1️⃣ /start - Access the help menu.  
+  2️⃣ /myreferral - Generate your unique referral link.  
+  3️⃣ /leaderboard - View the top members who have invited friends to become Simp Gods!
+  
+  >>> AIRDROP REWARD RULES:
+  
+  📱 Share Your Link: Use your unique referral link to invite friends!  
+  
+  🚀 Top 20 Rewards: The top 20 members on the leaderboard will share $5,000 in $SIMPG Tokens for FREE!  
+  
+  ⏳ Limited Time: This exclusive pre-launch airdrop is time-sensitive, so act fast and invite as many friends as you can!
+  
+  >>> WHY IT'S FUN BEING A SIMP GOD:
+  
+  🌹 Exclusive Interaction: Engage with our AI Madison Beer like a true Simp God: [simpgods.wtf/ai]
+  
+  🤳 Social Rewards: Post screenshots of your interactions on X with #simpgodswtf for secret rewards!  
+  
+  🎉 Weekly Challenges: Participate in weekly challenges for additional bonuses and keep the community engaged!
+  `;
 
   const user = await User.findOne({ referralCode: userId });
   if (!user) {
@@ -40,6 +47,7 @@ export const handleUsername = async (bot, chatId, userId, username) => {
     localImagePath,
     {
       caption: welcomeText,
+      innerWidth: '300px',
       filename: originalFilename,
       parse_mode: 'HTML',
       reply_markup: {
@@ -63,9 +71,9 @@ export const handleReferral = async (username, userId, referralCode) => {
   const rocketEmoji = '\uD83D\uDE80'; // 🚀
   const gemEmoji = '\uD83D\uDC8E'; // 💎
   const giftEmoji = '\uD83C\uDF81'; // 🎁
-  const inviteText = `Welcom to Simp Gods! <${username}>\n
-      ${giftEmoji} You are invited to our Simp Gods!${giftEmoji}\n
-      ${gemEmoji}${gemEmoji}${gemEmoji} Join our Group and Enjoy!!!\n
+  const inviteText = `Welcome to Simp Gods! <${username}>\n
+      ${giftEmoji} You are invited to Simp Gods!${giftEmoji}\n
+      ${gemEmoji}${gemEmoji}${gemEmoji} Join Group and Enjoy!!!\n
       Simp is your gateway to rewards and adventures! ${rocketEmoji}\n`;
   const options = {
     reply_markup: JSON.stringify({
@@ -84,10 +92,10 @@ export const handleReferral = async (username, userId, referralCode) => {
     if (!referralCode) return { status: 'error', message: 'No referral code provided' };
     if (referralCode === userId) return { status: 'error', message: 'Referral code isn\'t the same as the user ID' };
     const updatedUser = await User.findOneAndUpdate({ referralCode: userId }, { username, referredBy: referralCode }, { new: true, upsert: true });
-    console.log("User referred: ", updatedUser);
+    console.log("Updated User referred: ", updatedUser);
     const referralUser = await User.findOne({ referralCode: referralCode });
     if (!referralUser) {
-      const createdReferralUser = await User.create({ referralCode });
+      const createdReferralUser = await User.create({ referralCode, username: "" });
       console.log("Referral user created: ", createdReferralUser);
     } else console.log("Referral user already exists: ", referralUser);
     return { status: 'success', message: inviteText, options: options };
@@ -112,20 +120,21 @@ export const handleReferral = async (username, userId, referralCode) => {
 
 export const handleReferralVerification = async (member) => {
   const { id, username, is_bot } = member;
-  console.log("User referred: ", member);
-  if (is_bot) return { status: 'error', message: `Welcom to Simp Gods! <${username}>` };
+  console.log("Member referred: ", member);
+  if (is_bot) return { status: 'error', message: `Welcome to Simp Gods! <${username}>` };
   const user = await User.findOne({ referralCode: id });
-  if (!user) return { status: 'error', message: `Welcom to Simp Gods! <${username}>` };
+  if (!user) return { status: 'error', message: `Welcome to Simp Gods! <${username}>` };
 
   const referralUser = await User.findOne({ referralCode: user.referredBy });
-  if (!referralUser) return { status: 'error', message: `Welcom to Simp Gods! <${username}>` };
+  if (!referralUser) return { status: 'error', message: `Welcome to Simp Gods! <${username}>` };
+  if (referralUser.friends.find((value) => value.id === id )) return { status: 'error', message: `Welcome to Simp Gods! <${username}>` };
   referralUser.friends.push({ id, username });
   referralUser.referralCount++;
   referralUser.lastReferralDate = new Date();
   await referralUser.save();
 
   console.log("User referred: ", referralUser);
-  return { status: 'success', message: `Welcom to Simp Gods! <${username}>`, options: {} };
+  return { status: 'success', message: `Welcome to Simp Gods! <${username}>`, options: {} };
 }
 
 export const handleGetList = async () => {
