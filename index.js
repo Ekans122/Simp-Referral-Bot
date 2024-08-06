@@ -18,12 +18,7 @@ app.get('/', (req, res) => {
 })
 
 // Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(TOKEN);
-const webhookUrl = `https://simp-referral-bot.vercel.app/secret-path`;
-
-app.use(bot.webhookCallback('/secret-path'))
-
-bot.setWebHook(webhookUrl);
+const bot = new TelegramBot(TOKEN, { polling: true });
 
 bot.onText(/\/start (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
