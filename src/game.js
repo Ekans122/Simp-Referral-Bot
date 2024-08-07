@@ -150,3 +150,13 @@ export const handleGetList = async () => {
   });
   return { status: 'success', message: message };
 }
+
+export const handleUserList = async (username) => {
+  const user = await User.findOne({ username });
+  if (!user) return { status: 'error', message: 'User not found' };
+  let message = `Total members (${user.friends.length}):\n`;
+  user.friends.forEach(friend => {
+    message += `- @${friend.username}\n`;
+  });
+  return { status: 'success', message: message };
+}

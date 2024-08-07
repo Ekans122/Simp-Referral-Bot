@@ -3,7 +3,7 @@ import TelegramBot from "node-telegram-bot-api";
 // Use environment variables for sensitive information
 
 import { TOKEN, PORT, dbConnect, REFERRALLINK } from './config.js';
-import { handleReferral, handleUsername, handleReferralVerification, handleGetList } from "./game.js";
+import { handleReferral, handleUsername, handleReferralVerification, handleGetList, handleUserList } from "./game.js";
 
 
 dbConnect();
@@ -15,6 +15,16 @@ app.get("/", (req, res) => res.send("Express on Vercel"));
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(TOKEN, { polling: true });
+
+// Command to invite members
+bot.onText(/\/invitedmembers (.+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const username = match[1]; // Get the username from the command
+  const res = await handleUserList(username);
+  // Logic to invite the member (this is a placeholder)
+  // Note: Bots cannot directly invite users; they can only send messages.
+  await bot.sendMessage(chatId, res.message);
+});
 
 bot.onText(/\/start (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
