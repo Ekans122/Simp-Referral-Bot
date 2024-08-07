@@ -91,6 +91,7 @@ export const handleReferral = async (username, userId, referralCode) => {
   try {
     if (!username) return { status: 'error', message: 'No username provided' };
     if (!referralCode) return { status: 'error', message: 'No referral code provided' };
+    if (!userId) return { status: 'error', message: 'No user ID provided' };
     if (referralCode === userId) return { status: 'error', message: 'Referral code isn\'t the same as the user ID' };
     const updatedUser = await User.findOneAndUpdate({ referralCode: userId }, { username, referredBy: referralCode }, { new: true, upsert: true });
     console.log("Updated User referred: ", updatedUser);
@@ -122,7 +123,7 @@ export const handleReferral = async (username, userId, referralCode) => {
 export const handleReferralVerification = async (member) => {
   const { id, username, is_bot } = member;
   console.log("Member referred: ", member);
-  if (is_bot) return { status: 'error', message: `Welcome to Simp Gods! <${username}>` };
+  if (!id ||!username || is_bot) return { status: 'error', message: `Welcome to Simp Gods! <${username}>` };
   const user = await User.findOne({ referralCode: id });
   if (!user) {
     await User.create({ referralCode: id, username });
