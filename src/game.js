@@ -89,6 +89,7 @@ export const handleReferral = async (username, userId, referralCode) => {
     })
   };
   try {
+    if (!username) return { status: 'error', message: 'No username provided' };
     if (!referralCode) return { status: 'error', message: 'No referral code provided' };
     if (referralCode === userId) return { status: 'error', message: 'Referral code isn\'t the same as the user ID' };
     const updatedUser = await User.findOneAndUpdate({ referralCode: userId }, { username, referredBy: referralCode }, { new: true, upsert: true });
