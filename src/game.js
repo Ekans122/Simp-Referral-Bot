@@ -123,7 +123,9 @@ export const handleReferralVerification = async (member) => {
   console.log("Member referred: ", member);
   if (is_bot) return { status: 'error', message: `Welcome to Simp Gods! <${username}>` };
   const user = await User.findOne({ referralCode: id });
-  if (!user) return { status: 'error', message: `Welcome to Simp Gods! <${username}>` };
+  if (!user) {
+    await User.create({ referralCode: id, username });
+  }
 
   const referralUser = await User.findOne({ referralCode: user.referredBy });
   if (!referralUser) return { status: 'error', message: `Welcome to Simp Gods! <${username}>` };
