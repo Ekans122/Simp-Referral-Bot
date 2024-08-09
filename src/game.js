@@ -33,7 +33,7 @@ export const handleUsername = async (bot, chatId, userId, username) => {
   `;
 
   const user = await User.findOne({ referralCode: userId });
-  if (!user) {
+  if (!user && username) {
     await User.create({ referralCode: userId, username });
   }
   const buttons = []
