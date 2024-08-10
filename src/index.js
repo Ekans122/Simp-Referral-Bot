@@ -23,7 +23,7 @@ app.get("/", (req, res) => res.send("Express on Vercel"));
 if (NODE_ENV === 'production') {
   bot = new TelegramBot(token);
   // Set webhook to receive updates
-  console.log(BACKEND_URL + bot.token);
+  console.log("Backend is ", BACKEND_URL + bot.token);
   bot.setWebHook(BACKEND_URL + bot.token);
 }
 else {
@@ -36,6 +36,7 @@ console.log('bot server started...');
 
 app.post("/" + token, (req, res) => {
   bot.processUpdate(req.body);
+  console.log('Webhook event:', req.body);
   res.status(200).send();
 });
 
