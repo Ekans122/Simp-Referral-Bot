@@ -34,12 +34,6 @@ else {
 
 console.log('bot server started...');
 
-app.post("/" + token, (req, res) => {
-  bot.processUpdate(req.body);
-  console.log('Webhook event:', req.body);
-  res.status(200).send();
-});
-
 // Command to invite members
 bot.onText(/\/invitedmembers (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
@@ -98,6 +92,12 @@ bot.on('message', async msg => {
   } catch (err) {
     console.error(err);
   }
+});
+
+app.post("/" + token, (req, res) => {
+  bot.processUpdate(req.body);
+  console.log('Webhook event:', req.body);
+  res.status(200).send();
 });
 
 // Start the server
