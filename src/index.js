@@ -34,6 +34,20 @@ else {
 
 console.log('bot server started...');
 
+app.post("/" + token, (req, res) => {
+  bot.processUpdate(req.body);
+  console.log('Webhook event:', req.body);
+  res.status(200).send();
+});
+
+// Start the server
+
+const server = app.listen(PORT, () => {
+  const host = server.address().address;
+  const port = server.address().port;
+  console.log(`Server running at http://${host}:${port}/`);
+});
+
 // Command to invite members
 bot.onText(/\/invitedmembers (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
@@ -94,17 +108,4 @@ bot.on('message', async msg => {
   }
 });
 
-// app.post("/" + token, (req, res) => {
-//   bot.processUpdate(req.body);
-//   console.log('Webhook event:', req.body);
-//   res.status(200).send();
-// });
-
-// Start the server
-
-const server = app.listen(PORT, () => {
-  const host = server.address().address;
-  const port = server.address().port;
-  console.log(`Server running at http://${host}:${port}/`);
-});
 
