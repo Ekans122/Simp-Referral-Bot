@@ -2,19 +2,25 @@ import express from "express";
 import TelegramBot from "node-telegram-bot-api";
 // Use environment variables for sensitive information
 
-import { TOKEN, PORT, dbConnect, REFERRALLINK } from './config.js';
+import { TOKEN, PORT, dbConnect, REFERRALLINK, BACKEND_URL, NODE_ENV } from './config.js';
 import { handleReferral, handleUsername, handleReferralVerification, handleGetList, handleUserList } from "./game.js";
 
+const token = TOKEN;
 
-dbConnect();
+let bot;
 
-// Create an Express app
-const app = express();
+if (NODE_ENV === 'production') {
+  bot = new TelegramBot(token);
+  // Set webhook to receive updates
+  bot.setWebHook(BACKEND_URL + bot.token);
+}
+else {
+  // Use local development environment variables
+  // Create a bot that uses 'polling' to fetch new updates
+  bot = new TelegramBot(token, { polling: true });
+}
 
-app.get("/", (req, res) => res.send("Express on Vercel"));
-
-// Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(TOKEN, { polling: true });
+console.log('bot server started...');
 
 // Command to invite members
 bot.onText(/\/invitedmembers (.+)/, async (msg, match) => {
@@ -76,7 +82,25 @@ bot.on('message', async msg => {
   }
 });
 
+// Connect to MongoDB database
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+dbConnect();
+
+// Create an Express app
+
+const app = express();
+
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
+// Start the server
+
+const server = app.listen(PORT, () => {
+  const host = server.address().address;
+  const port = server.address().port;
+  console.log(`Server running at http://${host}:${port}/`);
+});
+
+app.post("/" + bot.token, (req, res) => {
+  bot.processUpdate(req.body);
+  res.status(200).send();
 });

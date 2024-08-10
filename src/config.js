@@ -15,4 +15,4 @@ export async function dbConnect() {
   }
 }
 
-export const { TOKEN, BACKEND_URL, PORT, REFERRALLINK, GROUPLINK } = process.env;
+export const { TOKEN, BACKEND_URL, PORT, REFERRALLINK, GROUPLINK, NODE_ENV } = process.env;
