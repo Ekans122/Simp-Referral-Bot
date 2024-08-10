@@ -94,11 +94,11 @@ bot.on('message', async msg => {
   }
 });
 
-app.post("/" + token, (req, res) => {
-  bot.processUpdate(req.body);
-  console.log('Webhook event:', req.body);
-  res.status(200).send();
-});
+// app.post("/" + token, (req, res) => {
+//   bot.processUpdate(req.body);
+//   console.log('Webhook event:', req.body);
+//   res.status(200).send();
+// });
 
 // Start the server
 
