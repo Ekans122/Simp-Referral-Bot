@@ -39,10 +39,6 @@ app.post("/" + token, (req, res) => {
   res.status(200).send();
 });
 
-/*
-  setwebhook to receive updates
-  https://api.telegram.org/bot7317317728:AAETfxgB009y5Lf6mqFaH6Skq_gVR1iajEU/setWebhook?url=https://simpreferralbot.onrender.com/7317317728:AAETfxgB009y5Lf6mqFaH6Skq_gVR1iajEU
-*/
 // Command to invite members
 bot.onText(/\/invitedmembers (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
