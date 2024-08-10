@@ -23,6 +23,7 @@ app.get("/", (req, res) => res.send("Express on Vercel"));
 if (NODE_ENV === 'production') {
   bot = new TelegramBot(token);
   // Set webhook to receive updates
+  console.log(BACKEND_URL + bot.token);
   bot.setWebHook(BACKEND_URL + bot.token);
 }
 else {
@@ -33,11 +34,15 @@ else {
 
 console.log('bot server started...');
 
-app.post("/" + bot.token, (req, res) => {
+app.post("/" + token, (req, res) => {
   bot.processUpdate(req.body);
   res.status(200).send();
 });
 
+/*
+  setwebhook to receive updates
+  https://api.telegram.org/bot7317317728:AAETfxgB009y5Lf6mqFaH6Skq_gVR1iajEU/setWebhook?url=https://simpreferralbot.onrender.com/7317317728:AAETfxgB009y5Lf6mqFaH6Skq_gVR1iajEU
+*/
 // Command to invite members
 bot.onText(/\/invitedmembers (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
