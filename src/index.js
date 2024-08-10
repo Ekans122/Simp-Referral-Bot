@@ -9,17 +9,6 @@ const token = TOKEN;
 
 let bot;
 
-// Connect to MongoDB database
-
-dbConnect();
-
-// Create an Express app
-
-const app = express();
-
-app.get("/", (req, res) => res.send("Express on Vercel"));
-
-
 if (NODE_ENV === 'production') {
   bot = new TelegramBot(token);
   // Set webhook to receive updates
@@ -32,21 +21,31 @@ else {
   bot = new TelegramBot(token, { polling: true });
 }
 
+
+// Connect to MongoDB database
+
+dbConnect();
+
+// Create an Express app
+
+const app = express();
+
+// parse the updates to JSON
+app.use(express.json());
+
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
 console.log('bot server started...');
 
 app.post("/" + token, (req, res) => {
-  bot.processUpdate(req.body);
   console.log('Webhook event:', req.body);
+  bot.processUpdate(req.body);
   res.status(200).send();
 });
 
 // Start the server
 
-const server = app.listen(PORT, () => {
-  const host = server.address().address;
-  const port = server.address().port;
-  console.log(`Server running at http://${host}:${port}/`);
-});
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
 // Command to invite members
 bot.onText(/\/invitedmembers (.+)/, async (msg, match) => {
