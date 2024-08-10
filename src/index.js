@@ -92,6 +92,12 @@ const app = express();
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
+
+app.post("/" + bot.token, (req, res) => {
+  bot.processUpdate(req.body);
+  res.status(200).send();
+});
+
 // Start the server
 
 const server = app.listen(PORT, () => {
@@ -100,7 +106,3 @@ const server = app.listen(PORT, () => {
   console.log(`Server running at http://${host}:${port}/`);
 });
 
-app.post("/" + bot.token, (req, res) => {
-  bot.processUpdate(req.body);
-  res.status(200).send();
-});
