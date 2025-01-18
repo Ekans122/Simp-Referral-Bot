@@ -1,1 +1,1 @@
-# TMA-nomad-bot
+# SimpReferralBot
