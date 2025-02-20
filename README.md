@@ -13,8 +13,8 @@ This Telegram bot, designed to run on Render, allows users to send referral link
 
 1. Clone this repository: <br />
 
-   `git clone https://github.com/Ekans111/SimpReferralBot.git` <br/>
-   `cd SimpReferralBot` <br/>
+   `git clone https://github.com/Ekans111/Simp-Referral-Bot.git` <br/>
+   `cd Simp-Referral-Bot` <br/>
    
 2. Install the required dependencies: <br />
   `npm install`
